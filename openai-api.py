@@ -1,7 +1,12 @@
 import openai
 import os
 import time
-openai.api_key = "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"
+from configparser import ConfigParser
+
+parser = ConfigParser()
+parser.read('config.ini')
+
+openai.api_key = parser['1st_section']['OPENAI_API_KEY']
 
 #Whisper
 audio_file_1 = open("/Users/macbookair/development/PBL-2023Spring/GPT-API/audio_files/long_speech.mp3", "rb")
