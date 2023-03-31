@@ -1,29 +1,27 @@
 import openai
 import os
 import time
-from configparser import ConfigParser
+import json
 
-parser = ConfigParser()
-parser.read('config.ini')
+with open('./config.json', 'r') as f:
+    config = json.load(f)
 
-openai.api_key = parser['1st_section']['OPENAI_API_KEY']
+openai.api_key = config['DEFAULT']['API_KEY']
 
 #Whisper
-audio_file_1 = open("/Users/macbookair/development/PBL-2023Spring/GPT-API/audio_files/long_speech.mp3", "rb")
-audio_file_2 = open("/Users/macbookair/development/PBL-2023Spring/GPT-API/audio_files/short_speech.mp3", "rb")
+long_speech = open("/Users/macbookair/development/PBL-2023Spring/GPT-API/audio_files/long_speech.mp3", "rb")
+short_speech = open("/Users/macbookair/development/PBL-2023Spring/GPT-API/audio_files/short_speech.mp3", "rb")
 
 whisper_start = time.time()
 
-transcript = openai.Audio.transcribe("whisper-1", audio_file_2)
+transcript = openai.Audio.transcribe("whisper-1", long_speech)
 text = transcript['text']
 
 whisper_end = time.time()
 print(text)
  
 
-
 chat_start = time.time()
-
 messages = [{
             "role":"system",
             "content" : "You are pororo who is famous Cartoon character in Korea"
@@ -45,7 +43,6 @@ if message:
     )
 
 reply = chat.choices[0].message.content
-
 chat_end = time.time()
 
 print(f"ChatGPT: {reply}")
